@@ -1,5 +1,6 @@
 const imgDisplay = document.querySelector('img.slider');
 const textDisplay = document.querySelector('h1.slider');
+let slideInterval;
 
 let time = 3000;
 let activeIndex = 0;
@@ -37,4 +38,25 @@ const switchSlide = () => {
   changeActiveDot();
 };
 
-setInterval(switchSlide, time);
+slideInterval = setInterval(switchSlide, time);
+
+const changeSlidesManually = (e) => {
+  if (e.keyCode === 37 || e.keyCode === 39) {
+    clearInterval(slideInterval);
+    e.keyCode === 37 ? activeIndex-- : activeIndex++;
+    if (activeIndex < 0) {
+      activeIndex = sliderOptions.length - 1;
+    } else if (activeIndex >= sliderOptions.length) {
+      activeIndex = 0;
+    }
+
+    imgDisplay.src = sliderOptions[activeIndex].img;
+    textDisplay.textContent = sliderOptions[activeIndex].text;
+
+    changeActiveDot();
+
+    slideInterval = setInterval(switchSlide, time);
+  }
+};
+
+document.body.addEventListener('keydown', changeSlidesManually);
